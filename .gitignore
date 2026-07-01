@@ -2,7 +2,5 @@
 __pycache__/
 *.pyc
 data/raw/
-models/
-*.pkl
 venv/
 .DS_Store
