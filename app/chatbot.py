@@ -17,27 +17,30 @@ try:
 except ImportError:
     GROQ_AVAILABLE = False
 
-# Load API key: first try environment, then secrets
-api_key = os.getenv("GROQ_API_KEY")
+def get_groq_client():
+    api_key = None
 
-# Try various secret locations
-if not api_key:
     try:
-        api_key = st.secrets.get("api", {}).get("groq_key")
+        api_key = st.secrets["api"]["anthropic_key"]
     except:
         pass
 
-if not api_key:
-    try:
-        api_key = st.secrets.get("GROQ_API_KEY")
-    except:
-        pass
+    if not api_key:
+        api_key = os.getenv("GROQ_API_KEY")
 
-if not api_key:
-    try:
-        api_key = st.secrets.get("groq_key")
-    except:
-        pass
+    if not api_key:
+        try:
+            api_key = st.secrets["GROQ_API_KEY"]
+        except:
+            pass
+
+    if not api_key:
+        st.error("Groq API key not found!")
+        st.stop()
+
+    return Groq(api_key=api_key)
+
+client = get_groq_client()
 
 # Load DB config: first try config.py, then secrets
 try:
@@ -322,23 +325,6 @@ def show_chatbot():
     if not GROQ_AVAILABLE:
         st.error("⚠️ Groq package is not installed. Please add 'groq' to requirements.txt and redeploy.")
         st.info("The AI Analyst Chat feature requires the Groq package to function.")
-        return
-
-    if not client:
-        st.error("⚠️ Groq API key not configured.")
-        st.info("Please set GROQ_API_KEY in Streamlit Cloud secrets:")
-        st.code("""
-[api]
-groq_key = "your_actual_groq_api_key_here"
-        """, language="toml")
-        st.info("Or set it as environment variable: GROQ_API_KEY")
-
-        # Debug info
-        with st.expander("Debug Info"):
-            st.write(f"API Key loaded: {bool(api_key)}")
-            st.write(f"API Key length: {len(api_key) if api_key else 0}")
-            st.write(f"API Key starts with: {api_key[:10] if api_key else 'None'}...")
-            st.write(f"Groq Available: {GROQ_AVAILABLE}")
         return
 
     # Custom CSS for styling
