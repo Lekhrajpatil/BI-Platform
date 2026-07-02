@@ -4,7 +4,6 @@ import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 from sqlalchemy import create_engine, text
-from groq import Groq
 import json
 import re
 import os
@@ -12,11 +11,17 @@ import sys
 from datetime import datetime
 from dotenv import load_dotenv
 
+try:
+    from groq import Groq
+    GROQ_AVAILABLE = True
+except ImportError:
+    GROQ_AVAILABLE = False
+
 # Load API key: first try environment, then secrets
 api_key = os.getenv("GROQ_API_KEY")
 if not api_key:
     try:
-        api_key = st.secrets["api"]["anthropic_key"]
+        api_key = st.secrets["api"]["groq_key"]
     except:
         pass
 
@@ -38,7 +43,10 @@ except:
         DB_USER = "postgres"
         DB_PASSWORD = "Password"
 
-client = Groq(api_key=api_key)
+if GROQ_AVAILABLE and api_key:
+    client = Groq(api_key=api_key)
+else:
+    client = None
 
 # System prompt for AI
 SYSTEM_PROMPT = """You are a senior business analyst working with an e-commerce company. You have access to this PostgreSQL database:
@@ -269,6 +277,16 @@ def create_chart(result_df, chart_type, chart_x, chart_y):
         return None
 
 def show_chatbot():
+    # Check if groq is available
+    if not GROQ_AVAILABLE:
+        st.error("⚠️ Groq package is not installed. Please add 'groq' to requirements.txt and redeploy.")
+        st.info("The AI Analyst Chat feature requires the Groq package to function.")
+        return
+
+    if not client:
+        st.error("⚠️ Groq API key not configured. Please set GROQ_API_KEY in environment variables or secrets.")
+        return
+
     # Custom CSS for styling
     st.markdown("""
     <style>

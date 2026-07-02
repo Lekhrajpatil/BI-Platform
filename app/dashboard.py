@@ -828,8 +828,13 @@ elif page == "AI Analyst Chat":
     import sys
     import os
     sys.path.append(os.path.dirname(__file__))
-    from chatbot import show_chatbot
-    show_chatbot()
+    try:
+        from chatbot import show_chatbot
+        show_chatbot()
+    except ImportError as e:
+        st.error("⚠️ AI Analyst Chat is currently unavailable due to missing dependencies.")
+        st.info("This feature requires the 'groq' package. Please ensure it's added to requirements.txt and the app is redeployed.")
+        st.code(f"Error: {str(e)}", language="python")
 
 # Auto-refresh
 time.sleep(60)
