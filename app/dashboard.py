@@ -825,42 +825,11 @@ elif page == "Product & Customer Intelligence":
 
 # PAGE 6: AI Analyst Chat
 elif page == "AI Analyst Chat":
-    st.title("🤖 AI Analyst Chat")
-    st.markdown("### Launch the AI-powered business analyst chatbot")
-    
-    st.info("""
-    The AI Analyst Chat is available as a separate Streamlit application.
-    
-    To launch it, run the following command in your terminal:
-    """)
-    
-    chatbot_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'app', 'chatbot.py')
-    st.code(f"streamlit run {chatbot_path}", language='bash')
-    
-    st.markdown("""
-    ### Features:
-    - Ask business questions in plain English
-    - Get instant SQL queries and results
-    - Automatic chart generation
-    - Conversation memory for follow-up questions
-    - Export conversations to PDF
-    - Voice of Data insights
-    """)
-    
-    if st.button("🚀 Launch Chatbot Now", type="primary"):
-        import subprocess
-        import threading
-        
-        def run_chatbot():
-            subprocess.run([sys.executable, "-m", "streamlit", "run", chatbot_path])
-        
-        # Run in a separate thread
-        thread = threading.Thread(target=run_chatbot)
-        thread.daemon = True
-        thread.start()
-        
-        st.success("Chatbot is launching in a new browser window...")
-        st.markdown(f"If it doesn't open automatically, navigate to: http://localhost:8501")
+    import sys
+    import os
+    sys.path.append(os.path.dirname(__file__))
+    from chatbot import show_chatbot
+    show_chatbot()
 
 # Auto-refresh
 time.sleep(60)
