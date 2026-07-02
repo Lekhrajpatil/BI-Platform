@@ -24,6 +24,16 @@ if not api_key:
         api_key = st.secrets["api"]["groq_key"]
     except:
         pass
+if not api_key:
+    try:
+        api_key = st.secrets["GROQ_API_KEY"]
+    except:
+        pass
+if not api_key:
+    try:
+        api_key = st.secrets["groq_key"]
+    except:
+        pass
 
 # Load DB config: first try config.py, then secrets
 try:
@@ -284,7 +294,13 @@ def show_chatbot():
         return
 
     if not client:
-        st.error("⚠️ Groq API key not configured. Please set GROQ_API_KEY in environment variables or secrets.")
+        st.error("⚠️ Groq API key not configured.")
+        st.info("Please set GROQ_API_KEY in Streamlit Cloud secrets:")
+        st.code("""
+[api]
+groq_key = "your_actual_groq_api_key_here"
+        """, language="toml")
+        st.info("Or set it as environment variable: GROQ_API_KEY")
         return
 
     # Custom CSS for styling
