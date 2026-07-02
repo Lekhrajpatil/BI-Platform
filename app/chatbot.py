@@ -442,7 +442,7 @@ def show_chatbot():
 
     # Display conversation history
     with chat_container:
-        for item in st.session_state.conversation_history:
+        for idx, item in enumerate(st.session_state.conversation_history):
             # User message
             st.markdown(f"""
             <div class="user-message">
@@ -465,12 +465,12 @@ def show_chatbot():
             if 'sql' in item and item['sql']:
                 with st.expander("View SQL Query"):
                     st.code(item['sql'], language='sql')
-            
+
             if 'result_df' in item and item['result_df'] is not None:
-                st.dataframe(item['result_df'], width='stretch')
+                st.dataframe(item['result_df'], width='stretch', key=f"df_{idx}")
 
             if 'chart' in item and item['chart'] is not None:
-                st.plotly_chart(item['chart'], width='stretch')
+                st.plotly_chart(item['chart'], width='stretch', key=f"chart_{idx}")
             
             if 'confidence' in item:
                 confidence_class = f"confidence-{item['confidence'].lower()}"
