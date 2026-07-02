@@ -172,20 +172,47 @@ def run_sql(sql_query):
 def process_question(user_question, conversation_history):
     # Show loading message
     with st.spinner("Analyzing your data..."):
-        raw_response = call_ai(
-            user_question, 
-            conversation_history
-        )
-        
+        try:
+            raw_response = call_ai(
+                user_question,
+                conversation_history
+            )
+        except Exception as e:
+            error_str = str(e)
+            if "AuthenticationError" in error_str or "401" in error_str or "invalid_api_key" in error_str:
+                return {
+                    "sql": None,
+                    "explanation": "Invalid Groq API Key",
+                    "chart_type": "none",
+                    "chart_x": "",
+                    "chart_y": "",
+                    "business_insight": "The Groq API key configured is invalid. Please check your API key in Streamlit Cloud secrets.",
+                    "key_finding": "",
+                    "recommendation": "Update your Groq API key in Streamlit Cloud settings",
+                    "confidence": "Low"
+                }, None, None
+            else:
+                return {
+                    "sql": None,
+                    "explanation": "API Error",
+                    "chart_type": "none",
+                    "chart_x": "",
+                    "chart_y": "",
+                    "business_insight": f"Error calling Groq API: {error_str}",
+                    "key_finding": "",
+                    "recommendation": "Please try again later",
+                    "confidence": "Low"
+                }, None, None
+
         # Parse response
         parsed = parse_ai_response(raw_response)
-        
+
         # Run SQL if exists
         df = None
         error = None
         if parsed["sql"]:
             df, error = run_sql(parsed["sql"])
-            
+
             # Retry once if SQL fails
             if error:
                 retry_question = f"""
@@ -194,13 +221,13 @@ def process_question(user_question, conversation_history):
                 Fix the SQL and try again for: {user_question}
                 """
                 raw_response2 = call_ai(
-                    retry_question, 
+                    retry_question,
                     conversation_history
                 )
                 parsed = parse_ai_response(raw_response2)
                 if parsed["sql"]:
                     df, error = run_sql(parsed["sql"])
-        
+
         return parsed, df, error
 
 # Function to create chart
