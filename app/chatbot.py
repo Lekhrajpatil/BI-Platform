@@ -20,45 +20,20 @@ except ImportError:
 def get_groq_client():
     api_key = None
 
-    # Debug: Show all available secrets
-    st.write("Available secrets keys:", list(st.secrets.keys()))
-
-    # Method 1
+    # Try secrets first
     try:
         api_key = st.secrets["api"]["anthropic_key"]
-    except Exception as e:
-        st.write(f"Method 1 failed: {e}")
+    except:
+        pass
 
-    # Method 2
-    if not api_key:
-        try:
-            api_key = st.secrets["GROQ_API_KEY"]
-        except Exception as e:
-            st.write(f"Method 2 failed: {e}")
-
-    # Method 3
+    # Fallback to environment variable
     if not api_key:
         api_key = os.getenv("GROQ_API_KEY")
-        st.write(f"Method 3 env: {api_key is not None}")
-
-    # Method 4: Try to access secrets directly
-    if not api_key:
-        try:
-            for key in st.secrets:
-                if "groq" in key.lower() or "api" in key.lower():
-                    st.write(f"Found potential key: {key}")
-                    if "key" in st.secrets[key].lower() if isinstance(st.secrets[key], str) else False:
-                        api_key = st.secrets[key]
-                        st.write(f"Using key from: {key}")
-                        break
-        except Exception as e:
-            st.write(f"Method 4 failed: {e}")
 
     if not api_key:
-        st.error("No key found anywhere!")
+        st.error("Groq API key not found in secrets or environment variables!")
         st.stop()
 
-    st.success("API key loaded successfully!")
     return Groq(api_key=api_key)
 
 client = get_groq_client()
