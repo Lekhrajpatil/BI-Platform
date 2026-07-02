@@ -19,19 +19,23 @@ except ImportError:
 
 # Load API key: first try environment, then secrets
 api_key = os.getenv("GROQ_API_KEY")
+
+# Try various secret locations
 if not api_key:
     try:
-        api_key = st.secrets["api"]["groq_key"]
+        api_key = st.secrets.get("api", {}).get("groq_key")
     except:
         pass
+
 if not api_key:
     try:
-        api_key = st.secrets["GROQ_API_KEY"]
+        api_key = st.secrets.get("GROQ_API_KEY")
     except:
         pass
+
 if not api_key:
     try:
-        api_key = st.secrets["groq_key"]
+        api_key = st.secrets.get("groq_key")
     except:
         pass
 
@@ -328,6 +332,13 @@ def show_chatbot():
 groq_key = "your_actual_groq_api_key_here"
         """, language="toml")
         st.info("Or set it as environment variable: GROQ_API_KEY")
+
+        # Debug info
+        with st.expander("Debug Info"):
+            st.write(f"API Key loaded: {bool(api_key)}")
+            st.write(f"API Key length: {len(api_key) if api_key else 0}")
+            st.write(f"API Key starts with: {api_key[:10] if api_key else 'None'}...")
+            st.write(f"Groq Available: {GROQ_AVAILABLE}")
         return
 
     # Custom CSS for styling
