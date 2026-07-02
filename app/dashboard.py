@@ -246,7 +246,7 @@ if page == "Executive Overview":
             template="plotly_dark"
         )
         fig_heatmap.update_layout(height=400)
-        st.plotly_chart(fig_heatmap, use_container_width=True)
+        st.plotly_chart(fig_heatmap, width='stretch')
     
     with col2:
         st.subheader("Revenue by Product Category")
@@ -258,7 +258,7 @@ if page == "Executive Overview":
             template="plotly_dark"
         )
         fig_treemap.update_layout(height=400)
-        st.plotly_chart(fig_treemap, use_container_width=True)
+        st.plotly_chart(fig_treemap, width='stretch')
     
     with col3:
         st.subheader("Review Score vs Delivery Days")
@@ -273,7 +273,7 @@ if page == "Executive Overview":
             opacity=0.6
         )
         fig_scatter.update_layout(height=400)
-        st.plotly_chart(fig_scatter, use_container_width=True)
+        st.plotly_chart(fig_scatter, width='stretch')
     
     # Row 3: Charts
     col1, col2 = st.columns(2)
@@ -298,7 +298,7 @@ if page == "Executive Overview":
             line=dict(color='orange', width=2)
         ))
         fig_area.update_layout(template="plotly_dark", height=350)
-        st.plotly_chart(fig_area, use_container_width=True)
+        st.plotly_chart(fig_area, width='stretch')
     
     with col2:
         st.subheader("Bottom 10 Categories by Review Score")
@@ -312,7 +312,7 @@ if page == "Executive Overview":
             color_continuous_scale='Reds'
         )
         fig_bar.update_layout(height=350, xaxis_title="Avg Review Score", yaxis_title="")
-        st.plotly_chart(fig_bar, use_container_width=True)
+        st.plotly_chart(fig_bar, width='stretch')
     
     render_footer()
 
@@ -342,7 +342,7 @@ elif page == "Sales Deep Dive":
         decreasing={"marker":{"color":"red"}}
     ))
     fig_waterfall.update_layout(template="plotly_dark", height=400)
-    st.plotly_chart(fig_waterfall, use_container_width=True)
+    st.plotly_chart(fig_waterfall, width='stretch')
     
     # Revenue vs Target
     st.subheader("Revenue vs Target (Target = Actual + 10%)")
@@ -369,7 +369,7 @@ elif page == "Sales Deep Dive":
     fig_line.add_annotation(x=str(worst_month), y=monthly_revenue.min(), text="⚠️ Worst", showarrow=True)
     
     fig_line.update_layout(template="plotly_dark", height=400)
-    st.plotly_chart(fig_line, use_container_width=True)
+    st.plotly_chart(fig_line, width='stretch')
     
     # Bubble chart: State vs Revenue vs Order Count vs Avg Review
     st.subheader("State Performance Bubble")
@@ -390,7 +390,7 @@ elif page == "Sales Deep Dive":
         labels={'revenue': 'Total Revenue', 'order_id': 'Order Count'}
     )
     fig_bubble.update_layout(height=400)
-    st.plotly_chart(fig_bubble, use_container_width=True)
+    st.plotly_chart(fig_bubble, width='stretch')
     
     # Cohort Analysis Heatmap
     st.subheader("Cohort Analysis - Customer Retention")
@@ -413,7 +413,7 @@ elif page == "Sales Deep Dive":
         template="plotly_dark"
     )
     fig_cohort.update_layout(height=400)
-    st.plotly_chart(fig_cohort, use_container_width=True)
+    st.plotly_chart(fig_cohort, width='stretch')
     
     # RFM Segment Distribution
     st.subheader("RFM Segment Distribution")
@@ -440,7 +440,7 @@ elif page == "Sales Deep Dive":
         marker=dict(colors=['#00CC96', '#EF553B', '#AB63FA', '#FFA15A', '#19D3F3'])
     )])
     fig_donut.update_layout(template="plotly_dark", height=400)
-    st.plotly_chart(fig_donut, use_container_width=True)
+    st.plotly_chart(fig_donut, width='stretch')
     
     render_footer()
 
@@ -465,7 +465,7 @@ elif page == "Churn Intelligence":
         color_continuous_scale='Reds'
     )
     fig_importance.update_layout(height=300)
-    st.plotly_chart(fig_importance, use_container_width=True)
+    st.plotly_chart(fig_importance, width='stretch')
     
     # 3D Scatter Plot
     st.subheader("Customer Segmentation 3D View")
@@ -490,7 +490,7 @@ elif page == "Churn Intelligence":
         labels={'recency': 'Days Since Last Order', 'frequency': 'Order Count', 'monetary': 'Total Spend'}
     )
     fig_3d.update_layout(height=500)
-    st.plotly_chart(fig_3d, use_container_width=True)
+    st.plotly_chart(fig_3d, width='stretch')
     
     # Gauge Chart
     st.subheader("Overall Churn Rate")
@@ -517,7 +517,7 @@ elif page == "Churn Intelligence":
         }
     ))
     fig_gauge.update_layout(height=300, template="plotly_dark")
-    st.plotly_chart(fig_gauge, use_container_width=True)
+    st.plotly_chart(fig_gauge, width='stretch')
     
     # Churn Risk Table
     st.subheader("Churn Risk Analysis")

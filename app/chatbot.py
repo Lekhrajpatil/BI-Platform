@@ -453,7 +453,7 @@ groq_key = "your_actual_groq_api_key_here"
     cols = st.columns(4)
     for idx, question in enumerate(example_questions):
         with cols[idx % 4]:
-            if st.button(question, key=f"example_{idx}", use_container_width=True):
+            if st.button(question, key=f"example_{idx}", width='stretch'):
                 st.session_state.user_input = question
 
     # Chat interface
@@ -486,10 +486,10 @@ groq_key = "your_actual_groq_api_key_here"
                     st.code(item['sql'], language='sql')
             
             if 'result_df' in item and item['result_df'] is not None:
-                st.dataframe(item['result_df'], use_container_width=True)
-            
+                st.dataframe(item['result_df'], width='stretch')
+
             if 'chart' in item and item['chart'] is not None:
-                st.plotly_chart(item['chart'], use_container_width=True)
+                st.plotly_chart(item['chart'], width='stretch')
             
             if 'confidence' in item:
                 confidence_class = f"confidence-{item['confidence'].lower()}"
@@ -518,7 +518,7 @@ groq_key = "your_actual_groq_api_key_here"
     # Send button
     col1, col2 = st.columns([6, 1])
     with col2:
-        send_button = st.button("Send", type="primary", use_container_width=True)
+        send_button = st.button("Send", type="primary", width='stretch')
 
     # Process user input
     if send_button and user_input:
