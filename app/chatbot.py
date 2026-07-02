@@ -20,15 +20,22 @@ except ImportError:
 def get_groq_client():
     api_key = None
 
+    # Debug: Show secrets structure
+    st.write("Secrets keys:", list(st.secrets.keys()))
+    if "api" in st.secrets:
+        st.write("API section keys:", list(st.secrets["api"].keys()))
+
     # Try secrets first
     try:
         api_key = st.secrets["api"]["anthropic_key"]
-    except:
-        pass
+        st.write("Found key via st.secrets['api']['anthropic_key']")
+    except Exception as e:
+        st.write(f"Failed to get key via st.secrets['api']['anthropic_key']: {e}")
 
     # Fallback to environment variable
     if not api_key:
         api_key = os.getenv("GROQ_API_KEY")
+        st.write(f"Env var GROQ_API_KEY found: {api_key is not None}")
 
     if not api_key:
         st.error("Groq API key not found in secrets or environment variables!")
