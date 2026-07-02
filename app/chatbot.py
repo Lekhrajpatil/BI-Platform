@@ -60,11 +60,6 @@ except:
         DB_USER = "postgres"
         DB_PASSWORD = "Password"
 
-if GROQ_AVAILABLE and api_key:
-    client = Groq(api_key=api_key)
-else:
-    client = None
-
 # System prompt for AI
 SYSTEM_PROMPT = """You are a senior business analyst working with an e-commerce company. You have access to this PostgreSQL database:
 
